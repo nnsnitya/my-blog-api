@@ -2,13 +2,14 @@ package com.nns.blog.controllers;
 
 import com.nns.blog.constants.ApiConstants;
 import com.nns.blog.dto.common.UserDto;
+import com.nns.blog.dto.responses.Code;
+import com.nns.blog.dto.responses.ResponseHandler;
 import com.nns.blog.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -40,13 +41,13 @@ public class UserController {
 
     //GET - get All User
     @GetMapping("/")
-    public ResponseEntity<List<UserDto>> getAllUsers() {
-        return ResponseEntity.ok(userService.getAllUsers());
+    public ResponseEntity<Object> getAllUsers() {
+        return ResponseHandler.generateResp("All users", HttpStatus.OK, userService.getAllUsers(), Code.SUCCESS.getCode());
     }
 
     //GET - get Single User
     @GetMapping("/{uid}")
-    public ResponseEntity<UserDto> getSingleUser(@PathVariable Long uid) {
-        return ResponseEntity.ok(userService.getUserById(uid));
+    public ResponseEntity<Object> getSingleUser(@PathVariable Long uid) {
+        return ResponseHandler.generateResp("Single User", HttpStatus.OK, userService.getUserById(uid), Code.SUCCESS.getCode());
     }
 }

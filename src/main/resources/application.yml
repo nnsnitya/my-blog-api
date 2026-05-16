@@ -1,0 +1,16 @@
+server:
+  port: 9090
+
+spring:
+  application:
+    name: my-blog-api
+  datasource:
+    url: jdbc:mysql://localhost:3307/my_blog_api
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+      #create, update, create-update, validate
+    show-sql: true

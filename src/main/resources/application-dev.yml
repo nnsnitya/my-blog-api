@@ -4,7 +4,9 @@ server:
 spring:
   application:
     name: my-blog-api
-
   config:
     import:
-      - classpath:database.yml
+      - classpath:database-dev.yml
+
+profile:
+  active: dev

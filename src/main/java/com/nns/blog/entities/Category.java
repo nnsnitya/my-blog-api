@@ -3,6 +3,9 @@ package com.nns.blog.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 
 @Entity
 @Table(name = "categories")
@@ -21,4 +24,6 @@ public class Category {
     @Column(name = "description")
     private String categoryDesc;
 
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Post> posts = new HashSet<>();
 }

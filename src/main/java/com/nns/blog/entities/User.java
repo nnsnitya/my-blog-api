@@ -3,6 +3,9 @@ package com.nns.blog.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "users")
 @NoArgsConstructor
@@ -24,5 +27,8 @@ public class User {
     private String password;
     @Column(name = "about")
     private String about;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Post> posts = new HashSet<>();
 
 }

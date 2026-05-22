@@ -5,6 +5,7 @@ import com.nns.blog.dto.common.CategoryDto;
 import com.nns.blog.dto.responses.Code;
 import com.nns.blog.dto.responses.ResponseHandler;
 import com.nns.blog.services.CategoryService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,14 +22,14 @@ public class CategoryController {
 
     //create
     @PostMapping("/")
-    public ResponseEntity<Object> createCategory(@RequestBody CategoryDto catDto) {
+    public ResponseEntity<Object> createCategory(@Valid @RequestBody CategoryDto catDto) {
         CategoryDto category = categoryService.createCategory(catDto);
         return ResponseHandler.generateResp("Creating Category", HttpStatus.CREATED, category, Code.SUCCESS.getCode());
     }
 
     //update
     @PutMapping("/{catId}")
-    public ResponseEntity<Object> updateCategory(@RequestBody CategoryDto catDto,
+    public ResponseEntity<Object> updateCategory(@Valid @RequestBody CategoryDto catDto,
                                                  @PathVariable Long catId) {
         CategoryDto categoryDto = categoryService.updateCategory(catDto, catId);
         return ResponseHandler.generateResp("Update Category", HttpStatus.OK, categoryDto, Code.SUCCESS.getCode());

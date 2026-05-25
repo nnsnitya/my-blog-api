@@ -5,6 +5,7 @@ import com.nns.blog.entities.User;
 import com.nns.blog.exceptions.ResourceNotFoundException;
 import com.nns.blog.repositories.UserRepository;
 import com.nns.blog.services.UserService;
+import com.nns.blog.utils.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,9 +20,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto createUser(UserDto userDto) {
-        User user = this.dtoToUser(userDto);
+        User user = Mapper.mapToUser(userDto);
         User savedUser = this.userRepo.save(user);
-        return this.userToDto(savedUser);
+        return Mapper.mapToUserDto(savedUser);
     }
 
     @Override
@@ -34,7 +35,7 @@ public class UserServiceImpl implements UserService {
         user.setAbout(userDto.about());
 
         User updatedUser = userRepo.save(user);
-        UserDto userDto1 = userToDto(updatedUser);
+        UserDto userDto1 = Mapper.mapToUserDto(updatedUser);
         return userDto1;
     }
 
@@ -42,13 +43,13 @@ public class UserServiceImpl implements UserService {
     public UserDto getUserById(Long userId) {
         User user = userRepo.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
-        return userToDto(user);
+        return Mapper.mapToUserDto(user);
     }
 
     @Override
     public List<UserDto> getAllUsers() {
         List<User> users = userRepo.findAll();
-        List<UserDto> userDtos = users.stream().map(user -> userToDto(user)).collect(Collectors.toList());
+        List<UserDto> userDtos = users.stream().map(user -> Mapper.mapToUserDto(user)).collect(Collectors.toList());
         return userDtos;
     }
 
@@ -59,17 +60,4 @@ public class UserServiceImpl implements UserService {
         userRepo.delete(user);
     }
 
-
-    private User dtoToUser(UserDto userDto) {
-        return User.builder()
-                .id(userDto.id())
-                .name(userDto.name())
-                .email(userDto.email())
-                .password(userDto.password())
-                .about(userDto.about())
-                .build();
-    }
-    private UserDto userToDto(User user) {
-        return new UserDto(user.getId(), user.getName(), user.getEmail(), user.getPassword(), user.getAbout());
-    }
 }

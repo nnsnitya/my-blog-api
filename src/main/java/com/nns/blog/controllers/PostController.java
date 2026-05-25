@@ -6,12 +6,19 @@ import com.nns.blog.dto.common.PostDto;
 import com.nns.blog.dto.responses.Code;
 import com.nns.blog.dto.responses.PostResponse;
 import com.nns.blog.dto.responses.ResponseHandler;
+import com.nns.blog.services.FileService;
 import com.nns.blog.services.PostService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.multipart.MultipartFile;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 @RestController
@@ -20,6 +27,11 @@ public class PostController {
 
     @Autowired
     private PostService postService;
+    @Autowired
+    private FileService fileService;
+
+    @Value("${project.image}")
+    private String path;
 
     //create
     @PostMapping("/user/{userId}/category/{catId}")
@@ -83,7 +95,7 @@ public class PostController {
     @PutMapping("/{postId}")
     public ResponseEntity<?> updatePost(@RequestBody PostDto postDto, @PathVariable Long postId) {
         PostDto post1 = postService.updatePost(postDto, postId);
-        return ResponseHandler.generateResp("Post updated !!", HttpStatus.OK, null, Code.SUCCESS.getCode());
+        return ResponseHandler.generateResp("Post updated !!", HttpStatus.OK, post1, Code.SUCCESS.getCode());
     }
 
     //search
@@ -93,4 +105,24 @@ public class PostController {
         return ResponseHandler.generateResp("Search Result..", HttpStatus.OK, postDtos, Code.SUCCESS.getCode());
     }
 
+    //post image upload
+    @PostMapping("/image/upload/{postId}")
+    public ResponseEntity<Object> uploadPostImage(@RequestParam("image") MultipartFile image,
+                                                  @PathVariable Long postId) throws IOException {
+        PostDto postDto = postService.getPostById(postId);
+        String fileName = fileService.uploadImage(path, image);
+        postDto.setImageName(fileName);
+        PostDto updatePost = postService.updatePost(postDto, postId);
+
+        return ResponseHandler.generateResp("Image uploaded", HttpStatus.OK, updatePost, Code.SUCCESS.getCode());
+    }
+
+    //method to serve files
+    @GetMapping(value = "image/{imageName}", produces = MediaType.IMAGE_JPEG_VALUE)
+    public void downloadImage(@PathVariable("imageName") String imageName,
+                              HttpServletResponse response) throws IOException {
+        InputStream resource = fileService.getResource(path, imageName);
+        response.setContentType(MediaType.IMAGE_JPEG_VALUE);
+        StreamUtils.copy(resource, response.getOutputStream());
+    }
 }

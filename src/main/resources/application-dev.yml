@@ -7,6 +7,7 @@ spring:
   config:
     import:
       - classpath:database-dev.yml
+      - classpath:multipart-dev.yml
 
 profile:
   active: dev

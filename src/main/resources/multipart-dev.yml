@@ -1,0 +1,14 @@
+
+project:
+  image: images/
+
+spring:
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+#  security:
+#    user:
+#      name: nitya
+#      password: nitya
+#      roles: ADMIN

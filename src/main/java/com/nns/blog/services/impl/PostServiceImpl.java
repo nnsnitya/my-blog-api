@@ -1,6 +1,7 @@
 package com.nns.blog.services.impl;
 
 import com.nns.blog.dto.common.PostDto;
+import com.nns.blog.dto.responses.PostResponse;
 import com.nns.blog.entities.Category;
 import com.nns.blog.entities.Post;
 import com.nns.blog.entities.User;
@@ -11,6 +12,9 @@ import com.nns.blog.repositories.UserRepository;
 import com.nns.blog.services.PostService;
 import com.nns.blog.utils.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -63,9 +67,12 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDto> getAllPost() {
-        List<Post> allPosts = postRepo.findAll();
-        return allPosts.stream().map(p -> Mapper.mapToPostDto(p)).collect(Collectors.toList());
+    public PostResponse getAllPost(Integer pageNumber, Integer pageSize) {
+        Pageable page = PageRequest.of(pageNumber, pageSize);
+        Page<Post> pagePosts = postRepo.findAll(page);
+        //List<Post> allPosts = pagePosts.getContent();
+        //List<PostDto> posts = allPosts.stream().map(p -> Mapper.mapToPostDto(p)).toList();
+        return PostResponse.from(pagePosts);
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.nns.blog.services;
 
 import com.nns.blog.dto.common.PostDto;
-
+import com.nns.blog.dto.responses.PostResponse;
 import java.util.List;
 
 public interface PostService {
@@ -15,7 +15,7 @@ public interface PostService {
     void deletePost(Long postId);
 
     //get All posts
-    List<PostDto> getAllPost();
+    PostResponse getAllPost(Integer pageNumber, Integer pageSize);
 
     //get Single post
     PostDto getPostById(Long postId);

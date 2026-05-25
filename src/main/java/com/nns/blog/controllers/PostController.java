@@ -3,6 +3,7 @@ package com.nns.blog.controllers;
 import com.nns.blog.constants.ApiConstants;
 import com.nns.blog.dto.common.PostDto;
 import com.nns.blog.dto.responses.Code;
+import com.nns.blog.dto.responses.PostResponse;
 import com.nns.blog.dto.responses.ResponseHandler;
 import com.nns.blog.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,9 +52,12 @@ public class PostController {
 
     //get all posts
     @GetMapping("/")
-    public ResponseEntity<?> getAllPosts() {
-        List<PostDto> allPost = postService.getAllPost();
-        return ResponseHandler.generateResp("All Posts", HttpStatus.OK, allPost, Code.SUCCESS.getCode());
+    public ResponseEntity<?> getAllPosts(
+            @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize
+    ) {
+        PostResponse postResp = postService.getAllPost(pageNumber, pageSize);
+        return ResponseHandler.generateResp("All Posts", HttpStatus.OK, postResp, Code.SUCCESS.getCode());
     }
 
     //delete post

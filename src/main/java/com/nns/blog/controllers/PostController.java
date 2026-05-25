@@ -111,8 +111,8 @@ public class PostController {
                                                   @PathVariable Long postId) throws IOException {
         PostDto postDto = postService.getPostById(postId);
         String fileName = fileService.uploadImage(path, image);
-        postDto.setImageName(fileName);
-        PostDto updatePost = postService.updatePost(postDto, postId);
+        PostDto postDto1 = postDto.updateImageName(fileName);
+        PostDto updatePost = postService.updatePost(postDto1, postId);
 
         return ResponseHandler.generateResp("Image uploaded", HttpStatus.OK, updatePost, Code.SUCCESS.getCode());
     }

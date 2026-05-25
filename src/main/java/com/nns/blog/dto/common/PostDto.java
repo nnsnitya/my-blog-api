@@ -23,4 +23,15 @@ public record PostDto(
                 UserDto.from(post.getUser())
                 );
     }
+
+    public PostDto updateImageName(String imgName) {
+        return new PostDto(postId,
+                title,
+                content,
+                imgName,
+                addedDate,
+                category,
+                user
+        );
+    }
 }

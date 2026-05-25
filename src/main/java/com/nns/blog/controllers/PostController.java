@@ -84,4 +84,12 @@ public class PostController {
         PostDto post1 = postService.updatePost(postDto, postId);
         return ResponseHandler.generateResp("Post updated !!", HttpStatus.OK, null, Code.SUCCESS.getCode());
     }
+
+    //search
+    @GetMapping("/search/{key}")
+    public ResponseEntity<?> searchPosts(@PathVariable String key) {
+        List<PostDto> postDtos = postService.searchPosts(key);
+        return ResponseHandler.generateResp("Search Result..", HttpStatus.OK, postDtos, Code.SUCCESS.getCode());
+    }
+
 }

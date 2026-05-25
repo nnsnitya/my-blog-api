@@ -89,10 +89,10 @@ public class PostServiceImpl implements PostService {
 
         Category cat = categoryRepo.findById(catId)
                 .orElseThrow(() -> new ResourceNotFoundException("Category","Id",catId));
-//        List<Post> postsByCat = postRepo.findByCategory(cat, pageable);
+//        List<Post> postsByCat = postRepo.findByCategory(cat);
 
         Page<Post> posts = postRepo.findByCategory(cat, pageable);
-        return PostResponse.from(posts);//postsByCat.stream().map(p -> Mapper.mapToPostDto(p)).collect(Collectors.toList());
+        return PostResponse.from(posts);
     }
 
     @Override
@@ -108,6 +108,13 @@ public class PostServiceImpl implements PostService {
                 .orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
         Page<Post> postsByUser = postRepo.findByUser(user, pageable);
         return PostResponse.from(postsByUser);
+    }
+
+    @Override
+    public List<PostDto> searchPosts(String keyword) {
+        List<Post> posts = postRepo.findByTitleContaining(keyword);
+        List<PostDto> list = posts.stream().map(p -> PostDto.from(p)).toList();
+        return list;
     }
 
 }

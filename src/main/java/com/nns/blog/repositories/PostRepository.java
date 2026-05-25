@@ -12,5 +12,5 @@ import java.util.List;
 public interface PostRepository extends JpaRepository<Post, Long> {
     Page<Post> findByUser(User user, Pageable pageable);
     Page<Post> findByCategory(Category category, Pageable pageable);
-
+    List<Post> findByTitleContaining(String title);
 }

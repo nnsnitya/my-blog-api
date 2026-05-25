@@ -5,7 +5,6 @@ import com.nns.blog.entities.User;
 import com.nns.blog.exceptions.ResourceNotFoundException;
 import com.nns.blog.repositories.UserRepository;
 import com.nns.blog.services.UserService;
-import com.nns.blog.utils.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,9 +19,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto createUser(UserDto userDto) {
-        User user = Mapper.mapToUser(userDto);
+        User user = User.builder()
+                .name(userDto.name())
+                .email(userDto.email())
+                .password(userDto.password())
+                .about(userDto.about())
+                .build();
         User savedUser = this.userRepo.save(user);
-        return Mapper.mapToUserDto(savedUser);
+        return UserDto.from(savedUser);
     }
 
     @Override
@@ -35,21 +39,20 @@ public class UserServiceImpl implements UserService {
         user.setAbout(userDto.about());
 
         User updatedUser = userRepo.save(user);
-        UserDto userDto1 = Mapper.mapToUserDto(updatedUser);
-        return userDto1;
+        return UserDto.from(updatedUser);
     }
 
     @Override
     public UserDto getUserById(Long userId) {
         User user = userRepo.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
-        return Mapper.mapToUserDto(user);
+        return UserDto.from(user);
     }
 
     @Override
     public List<UserDto> getAllUsers() {
         List<User> users = userRepo.findAll();
-        List<UserDto> userDtos = users.stream().map(user -> Mapper.mapToUserDto(user)).collect(Collectors.toList());
+        List<UserDto> userDtos = users.stream().map(user -> UserDto.from(user)).collect(Collectors.toList());
         return userDtos;
     }
 

@@ -1,5 +1,6 @@
 package com.nns.blog.dto.common;
 
+import com.nns.blog.entities.User;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
@@ -16,4 +17,15 @@ public record UserDto(
       String password,
       String about
 ) {
+
+    public static UserDto from(User user) {
+
+        return new UserDto(
+                user.getId(),
+                user.getName(),
+                user.getEmail(),
+                user.getPassword(),
+                user.getAbout()
+        );
+    }
 }

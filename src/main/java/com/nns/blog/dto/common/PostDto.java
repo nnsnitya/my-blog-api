@@ -1,7 +1,6 @@
 package com.nns.blog.dto.common;
 
 import com.nns.blog.entities.Post;
-import com.nns.blog.utils.Mapper;
 
 import java.util.Date;
 
@@ -20,8 +19,8 @@ public record PostDto(
                 post.getContent(),
                 post.getImageName(),
                 post.getAddedDate(),
-                Mapper.mapToCategoryDto(post.getCategory()),
-                Mapper.mapToUserDto(post.getUser())
+                CategoryDto.from(post.getCategory()),
+                UserDto.from(post.getUser())
                 );
     }
 }

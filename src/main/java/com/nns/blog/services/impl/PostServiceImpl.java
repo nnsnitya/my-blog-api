@@ -1,5 +1,6 @@
 package com.nns.blog.services.impl;
 
+import com.nns.blog.dto.common.CategoryDto;
 import com.nns.blog.dto.common.PostDto;
 import com.nns.blog.dto.responses.PostResponse;
 import com.nns.blog.entities.Category;
@@ -10,7 +11,6 @@ import com.nns.blog.repositories.CategoryRepository;
 import com.nns.blog.repositories.PostRepository;
 import com.nns.blog.repositories.UserRepository;
 import com.nns.blog.services.PostService;
-import com.nns.blog.utils.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -38,14 +37,18 @@ public class PostServiceImpl implements PostService {
                 .orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
         Category cat = categoryRepo.findById(catId)
                 .orElseThrow(() -> new ResourceNotFoundException("Category", "Id", catId));
-        Post post = Mapper.mapToPost(postDto);
+
+        Post post = Post.builder()
+                .title(postDto.title())
+                .content(postDto.content())
+                .build();
         post.setImageName("default.png");
         post.setAddedDate(new Date());
         post.setUser(user);
         post.setCategory(cat);
 
         Post newPost = postRepo.save(post);
-        return Mapper.mapToPostDto(newPost);
+        return PostDto.from(newPost);
     }
 
     @Override
@@ -55,9 +58,16 @@ public class PostServiceImpl implements PostService {
         post.setTitle(postDto.title());
         post.setContent(postDto.content());
         post.setImageName(postDto.imageName());
-        post.setCategory(Mapper.mapToCategory(postDto.category()));
+
+        CategoryDto catDto = postDto.category();
+        Category cat = Category.builder()
+                .categoryId(catDto.categoryId())
+                .categoryTitle(catDto.categoryTitle())
+                .categoryDesc(catDto.categoryDescription()).build();
+
+        post.setCategory(cat);
         Post updatedPost = postRepo.save(post);
-        return Mapper.mapToPostDto(updatedPost);
+        return PostDto.from(updatedPost);
     }
 
     @Override
@@ -80,7 +90,7 @@ public class PostServiceImpl implements PostService {
     public PostDto getPostById(Long postId) {
         Post post = postRepo.findById(postId)
                 .orElseThrow(() -> new ResourceNotFoundException("Post", "Id", postId));
-        return Mapper.mapToPostDto(post);
+        return PostDto.from(post);
     }
 
     @Override

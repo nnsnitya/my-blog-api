@@ -1,5 +1,6 @@
 package com.nns.blog.dto.common;
 
+import com.nns.blog.entities.Category;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -12,4 +13,13 @@ public record CategoryDto(
         @Size(min = 10, message = "Min size of category description is 10")
         String categoryDescription
 ) {
+
+    public static CategoryDto from(Category category) {
+
+        return new CategoryDto(
+                category.getCategoryId(),
+                category.getCategoryTitle(),
+                category.getCategoryDesc()
+        );
+    }
 }

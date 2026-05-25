@@ -31,9 +31,15 @@ public class PostController {
 
     //get by user
     @GetMapping("/user/{userId}")
-    public ResponseEntity<?> getPostsByUser(@PathVariable Long userId) {
-        List<PostDto> postsByUser = postService.getPostByUser(userId);
-        return ResponseHandler.generateResp("post by user", HttpStatus.OK, postsByUser, Code.SUCCESS.getCode());
+    public ResponseEntity<?> getPostsByUser(
+            @PathVariable Long userId,
+            @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize,
+            @RequestParam(value = "sortBy", defaultValue = "postId", required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir
+    ) {
+        PostResponse postsResp = postService.getPostByUser(userId, pageNumber, pageSize, sortBy, sortDir);
+        return ResponseHandler.generateResp("post by user", HttpStatus.OK, postsResp, Code.SUCCESS.getCode());
     }
 
     //get by category

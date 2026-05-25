@@ -96,11 +96,18 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDto> getPostByUser(Long userId) {
+    public PostResponse getPostByUser(Long userId, Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
+        Sort sort = null;
+        if (sortDir.equalsIgnoreCase("asc")) {
+            sort = Sort.by(sortBy).ascending();
+        } else {
+            sort = Sort.by(sortBy).descending();
+        }
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
         User user = userRepo.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
-        List<Post> postsByUser = postRepo.findByUser(user);
-        return postsByUser.stream().map(p -> Mapper.mapToPostDto(p)).collect(Collectors.toList());
+        Page<Post> postsByUser = postRepo.findByUser(user, pageable);
+        return PostResponse.from(postsByUser);
     }
 
 }

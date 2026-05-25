@@ -1,6 +1,7 @@
 package com.nns.blog.controllers;
 
 import com.nns.blog.constants.ApiConstants;
+import com.nns.blog.constants.AppConstants;
 import com.nns.blog.dto.common.PostDto;
 import com.nns.blog.dto.responses.Code;
 import com.nns.blog.dto.responses.PostResponse;
@@ -33,10 +34,10 @@ public class PostController {
     @GetMapping("/user/{userId}")
     public ResponseEntity<?> getPostsByUser(
             @PathVariable Long userId,
-            @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
-            @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize,
-            @RequestParam(value = "sortBy", defaultValue = "postId", required = false) String sortBy,
-            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir
+            @RequestParam(value = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
+            @RequestParam(value = "sortBy", defaultValue = AppConstants.SORT_BY, required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = AppConstants.SORT_DIR, required = false) String sortDir
     ) {
         PostResponse postsResp = postService.getPostByUser(userId, pageNumber, pageSize, sortBy, sortDir);
         return ResponseHandler.generateResp("post by user", HttpStatus.OK, postsResp, Code.SUCCESS.getCode());
@@ -46,9 +47,9 @@ public class PostController {
     @GetMapping("/category/{catId}")
     public ResponseEntity<?> getPostsByCategory(
             @PathVariable Long catId,
-            @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
-            @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize,
-            @RequestParam(value = "sortBy", defaultValue = "postId", required = false) String sortBy
+            @RequestParam(value = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
+            @RequestParam(value = "sortBy", defaultValue = AppConstants.SORT_BY, required = false) String sortBy
     ) {
         PostResponse postResp = postService.getPostByCategory(catId, pageNumber, pageSize, sortBy);
         return ResponseHandler.generateResp("post by category", HttpStatus.OK, postResp, Code.SUCCESS.getCode());
@@ -64,8 +65,8 @@ public class PostController {
     //get all posts
     @GetMapping("/")
     public ResponseEntity<?> getAllPosts(
-            @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
-            @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize
+            @RequestParam(value = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize
     ) {
         PostResponse postResp = postService.getAllPost(pageNumber, pageSize);
         return ResponseHandler.generateResp("All Posts", HttpStatus.OK, postResp, Code.SUCCESS.getCode());

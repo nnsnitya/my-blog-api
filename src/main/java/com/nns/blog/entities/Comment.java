@@ -1,15 +1,15 @@
 package com.nns.blog.entities;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name = "comments")
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Comment {
 
     @Id
@@ -22,5 +22,7 @@ public class Comment {
     @JoinColumn(name = "post_id")
     private Post post;
 
-
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }

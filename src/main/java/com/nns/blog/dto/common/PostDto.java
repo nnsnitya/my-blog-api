@@ -1,6 +1,5 @@
 package com.nns.blog.dto.common;
 
-import com.nns.blog.entities.Comment;
 import com.nns.blog.entities.Post;
 
 import java.util.Date;
@@ -14,7 +13,8 @@ public record PostDto(
     String imageName,
     Date addedDate,
     CategoryDto category,
-    UserDto user,
+    Long userId,
+    String userName,
     Set<CommentDto> comments
 ) {
     public static PostDto from(Post post) {
@@ -27,7 +27,8 @@ public record PostDto(
                 post.getImageName(),
                 post.getAddedDate(),
                 CategoryDto.from(post.getCategory()),
-                UserDto.from(post.getUser()),
+                post.getUser().getId(),
+                post.getUser().getName(),
                 commentDtos
                 );
     }
@@ -39,7 +40,8 @@ public record PostDto(
                 imgName,
                 addedDate,
                 category,
-                user,
+                userId,
+                userName,
                 comments
         );
     }

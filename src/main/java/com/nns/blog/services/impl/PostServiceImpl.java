@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -83,11 +84,15 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDto> getPostByCategory(Long catId) {
+    public PostResponse getPostByCategory(Long catId, Integer pageNumber, Integer pageSize, String sortBy) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
+
         Category cat = categoryRepo.findById(catId)
                 .orElseThrow(() -> new ResourceNotFoundException("Category","Id",catId));
-        List<Post> postsByCat = postRepo.findByCategory(cat);
-        return postsByCat.stream().map(p -> Mapper.mapToPostDto(p)).collect(Collectors.toList());
+//        List<Post> postsByCat = postRepo.findByCategory(cat, pageable);
+
+        Page<Post> posts = postRepo.findByCategory(cat, pageable);
+        return PostResponse.from(posts);//postsByCat.stream().map(p -> Mapper.mapToPostDto(p)).collect(Collectors.toList());
     }
 
     @Override

@@ -38,9 +38,14 @@ public class PostController {
 
     //get by category
     @GetMapping("/category/{catId}")
-    public ResponseEntity<?> getPostsByCategory(@PathVariable Long catId) {
-        List<PostDto> postsByCategory = postService.getPostByCategory(catId);
-        return ResponseHandler.generateResp("post by category", HttpStatus.OK, postsByCategory, Code.SUCCESS.getCode());
+    public ResponseEntity<?> getPostsByCategory(
+            @PathVariable Long catId,
+            @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize,
+            @RequestParam(value = "sortBy", defaultValue = "postId", required = false) String sortBy
+    ) {
+        PostResponse postResp = postService.getPostByCategory(catId, pageNumber, pageSize, sortBy);
+        return ResponseHandler.generateResp("post by category", HttpStatus.OK, postResp, Code.SUCCESS.getCode());
     }
 
     //get post by id

@@ -8,6 +8,7 @@ spring:
     import:
       - classpath:database-dev.yml
       - classpath:multipart-dev.yml
+      - classpath:security-dev.yml
 
 profile:
   active: dev

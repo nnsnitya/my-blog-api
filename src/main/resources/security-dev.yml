@@ -1,0 +1,13 @@
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+
+spring:
+  security:
+    user:
+      name: nitya
+      password: nitya
+      roles: ADMIN

@@ -6,6 +6,7 @@ import com.nns.blog.exceptions.ResourceNotFoundException;
 import com.nns.blog.repositories.UserRepository;
 import com.nns.blog.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,13 +17,15 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepo;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public UserDto createUser(UserDto userDto) {
         User user = User.builder()
                 .name(userDto.name())
                 .email(userDto.email())
-                .password(userDto.password())
+                .password(this.passwordEncoder.encode(userDto.password()))
                 .about(userDto.about())
                 .build();
         User savedUser = this.userRepo.save(user);

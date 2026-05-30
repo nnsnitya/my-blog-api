@@ -2,7 +2,6 @@ package com.nns.blog.dto.responses;
 
 import com.nns.blog.dto.common.PostDto;
 import com.nns.blog.entities.Post;
-import com.nns.blog.utils.Mapper;
 import org.springframework.data.domain.Page;
 
 import java.util.List;

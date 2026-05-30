@@ -1,5 +1,6 @@
 package com.nns.blog.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -20,6 +21,7 @@ import java.util.List;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    @Autowired
     private CustomUserDetailService customUserDetailService;
 
     @Bean
@@ -29,7 +31,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authz) -> authz
                         .anyRequest().authenticated()
                 )
-                .authenticationProvider(authenticationProvider(customUserDetailService))
+                .authenticationProvider(authenticationProvider(customUserDetailService, passwordEncoder()))
                 .httpBasic(Customizer.withDefaults());
         return http.build();
     }
@@ -48,9 +50,9 @@ public class SecurityConfig {
     }
 
     @Bean
-    public DaoAuthenticationProvider authenticationProvider(UserDetailsService userDetailsService) {
+    public DaoAuthenticationProvider authenticationProvider(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(userDetailsService);
-        authProvider.setPasswordEncoder(passwordEncoder());
+        authProvider.setPasswordEncoder(passwordEncoder);
         return authProvider;
     }
 

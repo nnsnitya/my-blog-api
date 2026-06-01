@@ -32,4 +32,10 @@ public class GlobalExceptionHandler {
         return ResponseHandler.generateResp("MethodArgsNotValidEx", HttpStatus.BAD_REQUEST, resp, Code.FAILED.getCode());
     }
 
+    @ExceptionHandler(ApiException.class)
+    public ResponseEntity<?> handleApiException(ApiException ex) {
+        String msg = ex.getMessage();
+        return ResponseHandler.generateResp(msg, HttpStatus.BAD_REQUEST, null, Code.FAILED.getCode());
+    }
+
 }

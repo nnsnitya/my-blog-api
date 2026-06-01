@@ -5,6 +5,7 @@ import com.nns.blog.dto.requests.JwtAuthRequest;
 import com.nns.blog.dto.responses.Code;
 import com.nns.blog.dto.responses.JwtAuthResponse;
 import com.nns.blog.dto.responses.ResponseHandler;
+import com.nns.blog.exceptions.ApiException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -47,7 +48,7 @@ public class AuthController {
             this.authManager.authenticate(authToken);
         } catch (BadCredentialsException e) {
             System.out.println("Invalid Details !!");
-            throw new Exception("Invalid Details !!");
+            throw new ApiException("Invalid Username or password !!");
         }
 
     }

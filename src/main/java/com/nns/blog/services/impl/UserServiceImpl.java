@@ -1,15 +1,21 @@
 package com.nns.blog.services.impl;
 
+import com.nns.blog.constants.AppConstants;
 import com.nns.blog.dto.common.UserDto;
+import com.nns.blog.entities.Role;
 import com.nns.blog.entities.User;
 import com.nns.blog.exceptions.ResourceNotFoundException;
+import com.nns.blog.repositories.RoleRepository;
 import com.nns.blog.repositories.UserRepository;
 import com.nns.blog.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.beans.Encoder;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -19,6 +25,24 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepo;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private RoleRepository roleRepository;
+
+    @Override
+    public UserDto registerUser(UserDto userDto) {
+        Set<Role> roles = new HashSet<>();//as role is not initialized in UserDto
+        User user = User.builder()
+                .name(userDto.name())
+                .email(userDto.email())
+                .password(passwordEncoder.encode(userDto.password()))
+                .about(userDto.about())
+                .roles(roles)           //because UserDto is record not class
+                .build();
+        Role role = roleRepository.findById(AppConstants.NORMAL_USER).get();
+        user.getRoles().add(role);
+        User newUser = userRepo.save(user);
+        return UserDto.from(newUser);
+    }
 
     @Override
     public UserDto createUser(UserDto userDto) {

@@ -1,11 +1,13 @@
 package com.nns.blog.security;
 
 import com.nns.blog.constants.ApiConstants;
+import com.nns.blog.dto.common.UserDto;
 import com.nns.blog.dto.requests.JwtAuthRequest;
 import com.nns.blog.dto.responses.Code;
 import com.nns.blog.dto.responses.JwtAuthResponse;
 import com.nns.blog.dto.responses.ResponseHandler;
 import com.nns.blog.exceptions.ApiException;
+import com.nns.blog.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,6 +32,8 @@ public class AuthController {
     private UserDetailsService userDetailsService;
     @Autowired
     private JwtUtil jwtUtils;
+    @Autowired
+    private UserService userService;
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody JwtAuthRequest loginReq) throws Exception {
@@ -50,7 +54,12 @@ public class AuthController {
             System.out.println("Invalid Details !!");
             throw new ApiException("Invalid Username or password !!");
         }
+    }
 
+    @PostMapping("register")
+    public ResponseEntity<?> registerUser(@RequestBody UserDto userDto) {
+        UserDto registeredUser = this.userService.registerUser(userDto);
+        return ResponseHandler.generateResp(registeredUser, "User registered successfully", HttpStatus.OK, Code.SUCCESS.getCode());
     }
 
 }

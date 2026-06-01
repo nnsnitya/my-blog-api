@@ -46,12 +46,12 @@ public class UserController {
     //GET - get All User
     @GetMapping("/")
     public ResponseEntity<Object> getAllUsers() {
-        return ResponseHandler.generateResp("All users", HttpStatus.OK, userService.getAllUsers(), Code.SUCCESS.getCode());
+        return ResponseHandler.generateResp(userService.getAllUsers(), "All users", HttpStatus.OK, Code.SUCCESS.getCode());
     }
 
     //GET - get Single User
     @GetMapping("/{uid}")
     public ResponseEntity<Object> getSingleUser(@PathVariable Long uid) {
-        return ResponseHandler.generateResp("Single User", HttpStatus.OK, userService.getUserById(uid), Code.SUCCESS.getCode());
+        return ResponseHandler.generateResp(userService.getUserById(uid), "Single User", HttpStatus.OK, Code.SUCCESS.getCode());
     }
 }

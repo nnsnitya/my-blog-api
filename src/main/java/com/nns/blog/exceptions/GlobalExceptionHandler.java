@@ -18,7 +18,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<?> resoureceNotFoundExceptionHandler(ResourceNotFoundException ex) {
         String msg = ex.getMessage();
-        return ResponseHandler.generateResp(msg, HttpStatus.NOT_FOUND, null, Code.FAILED.getCode());
+        return ResponseHandler.generateResp(msg, HttpStatus.NOT_FOUND, Code.FAILED.getCode());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -29,13 +29,13 @@ public class GlobalExceptionHandler {
             String message = error.getDefaultMessage();
             resp.put(fieldName, message);
         });
-        return ResponseHandler.generateResp("MethodArgsNotValidEx", HttpStatus.BAD_REQUEST, resp, Code.FAILED.getCode());
+        return ResponseHandler.generateResp(resp, "MethodArgsNotValidEx", HttpStatus.BAD_REQUEST, Code.FAILED.getCode());
     }
 
     @ExceptionHandler(ApiException.class)
     public ResponseEntity<?> handleApiException(ApiException ex) {
         String msg = ex.getMessage();
-        return ResponseHandler.generateResp(msg, HttpStatus.BAD_REQUEST, null, Code.FAILED.getCode());
+        return ResponseHandler.generateResp(msg, HttpStatus.BAD_REQUEST, Code.FAILED.getCode());
     }
 
 }

@@ -39,7 +39,7 @@ public class PostController {
                                         @PathVariable Long userId,
                                         @PathVariable Long catId) {
         PostDto createPostDto = postService.createPost(postDto, userId, catId);
-        return ResponseHandler.generateResp("Post created", HttpStatus.CREATED, createPostDto, Code.SUCCESS.getCode());
+        return ResponseHandler.generateResp(createPostDto, "Post created", HttpStatus.CREATED, Code.SUCCESS.getCode());
     }
 
     //get by user
@@ -52,7 +52,7 @@ public class PostController {
             @RequestParam(value = "sortDir", defaultValue = AppConstants.SORT_DIR, required = false) String sortDir
     ) {
         PostResponse postsResp = postService.getPostByUser(userId, pageNumber, pageSize, sortBy, sortDir);
-        return ResponseHandler.generateResp("post by user", HttpStatus.OK, postsResp, Code.SUCCESS.getCode());
+        return ResponseHandler.generateResp(postsResp, "post by user", HttpStatus.OK, Code.SUCCESS.getCode());
     }
 
     //get by category
@@ -64,14 +64,14 @@ public class PostController {
             @RequestParam(value = "sortBy", defaultValue = AppConstants.SORT_BY, required = false) String sortBy
     ) {
         PostResponse postResp = postService.getPostByCategory(catId, pageNumber, pageSize, sortBy);
-        return ResponseHandler.generateResp("post by category", HttpStatus.OK, postResp, Code.SUCCESS.getCode());
+        return ResponseHandler.generateResp(postResp, "post by category", HttpStatus.OK, Code.SUCCESS.getCode());
     }
 
     //get post by id
     @GetMapping("/{postId}")
     public ResponseEntity<?> getPostById(@PathVariable Long postId) {
         PostDto postById = postService.getPostById(postId);
-        return ResponseHandler.generateResp("Post By Id", HttpStatus.OK, postById, Code.SUCCESS.getCode());
+        return ResponseHandler.generateResp(postById, "Post By Id", HttpStatus.OK, Code.SUCCESS.getCode());
     }
 
     //get all posts
@@ -81,28 +81,28 @@ public class PostController {
             @RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize
     ) {
         PostResponse postResp = postService.getAllPost(pageNumber, pageSize);
-        return ResponseHandler.generateResp("All Posts", HttpStatus.OK, postResp, Code.SUCCESS.getCode());
+        return ResponseHandler.generateResp(postResp,"All Posts", HttpStatus.OK, Code.SUCCESS.getCode());
     }
 
     //delete post
     @DeleteMapping("/{postId}")
     public ResponseEntity<Object> deletePost(@PathVariable Long postId) {
         postService.deletePost(postId);
-        return ResponseHandler.generateResp("Post deleted!!", HttpStatus.OK, null, Code.SUCCESS.getCode());
+        return ResponseHandler.generateResp("Post deleted!!", HttpStatus.OK, Code.SUCCESS.getCode());
     }
 
     //update post
     @PutMapping("/{postId}")
     public ResponseEntity<?> updatePost(@RequestBody PostDto postDto, @PathVariable Long postId) {
         PostDto post1 = postService.updatePost(postDto, postId);
-        return ResponseHandler.generateResp("Post updated !!", HttpStatus.OK, post1, Code.SUCCESS.getCode());
+        return ResponseHandler.generateResp(post1, "Post updated !!", HttpStatus.OK, Code.SUCCESS.getCode());
     }
 
     //search
     @GetMapping("/search/{key}")
     public ResponseEntity<?> searchPosts(@PathVariable String key) {
         List<PostDto> postDtos = postService.searchPosts(key);
-        return ResponseHandler.generateResp("Search Result..", HttpStatus.OK, postDtos, Code.SUCCESS.getCode());
+        return ResponseHandler.generateResp(postDtos, "Search Result..", HttpStatus.OK, Code.SUCCESS.getCode());
     }
 
     //post image upload
@@ -114,7 +114,7 @@ public class PostController {
         PostDto postDto1 = postDto.updateImageName(fileName);
         PostDto updatePost = postService.updatePost(postDto1, postId);
 
-        return ResponseHandler.generateResp("Image uploaded", HttpStatus.OK, updatePost, Code.SUCCESS.getCode());
+        return ResponseHandler.generateResp(updatePost, "Image uploaded", HttpStatus.OK, Code.SUCCESS.getCode());
     }
 
     //method to serve files

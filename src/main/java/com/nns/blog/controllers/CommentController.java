@@ -23,13 +23,13 @@ public class CommentController {
                                                 @PathVariable Long userId
     ) {
         CommentDto createdComment = commentService.createComment(commentDto, postId, userId);
-        return ResponseHandler.generateResp("Comment Created", HttpStatus.CREATED, createdComment, Code.SUCCESS.getCode());
+        return ResponseHandler.generateResp(createdComment, "Comment Created", HttpStatus.CREATED, Code.SUCCESS.getCode());
     }
 
     @DeleteMapping("/comments/{commentId}")
     public ResponseEntity<Object> deleteComment(@PathVariable Long commentId) {
         commentService.deleteComment(commentId);
-        return ResponseHandler.generateResp("Comment Deleted", HttpStatus.OK, null, Code.SUCCESS.getCode());
+        return ResponseHandler.generateResp("Comment Deleted", HttpStatus.OK, Code.SUCCESS.getCode());
     }
 
 }

@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ResponseHandler {
-    public static ResponseEntity<Object> generateResp(String msg, HttpStatus status, Object responseObj, Integer code) {
+    public static ResponseEntity<Object> generateResp(Object responseObj, String msg, HttpStatus status, Integer code) {
         Map<String, Object> map =new HashMap<>();
         map.put("message", msg);
         map.put("status", status);

@@ -38,7 +38,7 @@ public class AuthController {
         UserDetails userDetails = this.userDetailsService.loadUserByUsername(loginReq.username());
         String token = this.jwtUtils.generateToken(userDetails);
         JwtAuthResponse response = new JwtAuthResponse(token);
-        return ResponseHandler.generateResp("Token Generated", HttpStatus.OK, response, Code.SUCCESS.getCode());
+        return ResponseHandler.generateResp(response, "Token Generated", HttpStatus.OK, Code.SUCCESS.getCode());
 
     }
 

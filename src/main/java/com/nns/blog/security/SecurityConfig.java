@@ -38,6 +38,16 @@ public class SecurityConfig {
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
+    public static final String[] PUBLIC_URLS = {
+            "/api/v1/auth/login",
+            "/v3/api-docs",
+            "/v2/api-docs",
+            "/swagger-resources/**",
+            "/swagger-ui/**",
+            "/webjars/**"
+    };
+
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors(cors-> cors.configurationSource(corsConfigurationSource()))
@@ -45,8 +55,7 @@ public class SecurityConfig {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((authz) -> authz
-                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
-                        .requestMatchers("/v3/api-docs").permitAll()
+                        .requestMatchers(PUBLIC_URLS).permitAll()
                         .requestMatchers(HttpMethod.GET).permitAll()
                         .anyRequest().authenticated()
                 )

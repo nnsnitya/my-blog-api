@@ -11,8 +11,9 @@ import com.nns.blog.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.beans.Encoder;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -28,6 +29,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private RoleRepository roleRepository;
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     @Override
     public UserDto registerUser(UserDto userDto) {
         Set<Role> roles = new HashSet<>();//as role is not initialized in UserDto
@@ -83,10 +85,12 @@ public class UserServiceImpl implements UserService {
         return userDtos;
     }
 
+    @Transactional
     @Override
     public void deleteUser(Long userId) {
         User user = userRepo.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
+        user.getRoles().clear();
         userRepo.delete(user);
     }
 

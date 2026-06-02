@@ -39,7 +39,7 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Comment> comments = new HashSet<>();
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_role_mapping",
             joinColumns = @JoinColumn(name = "user", referencedColumnName = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role", referencedColumnName = "id"))

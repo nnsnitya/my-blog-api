@@ -1,0 +1,7 @@
+#Redis running in docker using below command
+#docker run -d --name my_blog_redis -p 6379:6379 redis:8
+spring:
+  data:
+    redis:
+      host: localhost
+      port: 6379

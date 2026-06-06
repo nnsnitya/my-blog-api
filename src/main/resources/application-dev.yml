@@ -9,6 +9,7 @@ spring:
       - classpath:database-dev.yml
       - classpath:multipart-dev.yml
       - classpath:security-dev.yml
+      - classpath:redis-dev.yml
 
 profile:
   active: dev

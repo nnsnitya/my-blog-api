@@ -6,6 +6,8 @@ import com.nns.blog.exceptions.ResourceNotFoundException;
 import com.nns.blog.repositories.CategoryRepository;
 import com.nns.blog.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +19,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Autowired
     private CategoryRepository categoryRepo;
 
+    @CacheEvict(value = "categories", allEntries = true)
     @Override
     public CategoryDto createCategory(CategoryDto categoryDto) {
         Category category = Category.builder()
@@ -27,6 +30,7 @@ public class CategoryServiceImpl implements CategoryService {
         return CategoryDto.from(savedCategory);
     }
 
+    @CacheEvict(value = "categories", allEntries = true)
     @Override
     public CategoryDto updateCategory(CategoryDto categoryDto, Long categoryId) {
         Category category = categoryRepo.findById(categoryId)
@@ -37,6 +41,7 @@ public class CategoryServiceImpl implements CategoryService {
         return CategoryDto.from(updatedCat);
     }
 
+    @CacheEvict(value = "categories", allEntries = true)
     @Override
     public void deleteCategory(Long categoryId) {
         Category category = categoryRepo.findById(categoryId)
@@ -51,6 +56,7 @@ public class CategoryServiceImpl implements CategoryService {
         return CategoryDto.from(cat);
     }
 
+    @Cacheable(value = "categories", key = "'all_cat'")
     @Override
     public List<CategoryDto> getAllCategories() {
         List<Category> categories = categoryRepo.findAll();

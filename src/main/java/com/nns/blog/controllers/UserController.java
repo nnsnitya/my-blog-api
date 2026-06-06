@@ -5,6 +5,11 @@ import com.nns.blog.dto.common.UserDto;
 import com.nns.blog.dto.responses.Code;
 import com.nns.blog.dto.responses.ResponseHandler;
 import com.nns.blog.services.UserService;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -44,6 +49,15 @@ public class UserController {
     }
 
     //GET - get All User
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Users retrieved successfully",
+            content = @Content(
+                    mediaType = "application/json",
+                    array = @ArraySchema(schema = @Schema(implementation = UserDto.class))
+            )),
+            @ApiResponse(responseCode = "404", description = "No users found"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
     @GetMapping("/")
     public ResponseEntity<Object> getAllUsers() {
         return ResponseHandler.generateResp(userService.getAllUsers(), "All users", HttpStatus.OK, Code.SUCCESS.getCode());

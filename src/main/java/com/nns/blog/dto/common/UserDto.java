@@ -22,7 +22,7 @@ public record UserDto(
       Set<RoleDto> roles
 ) {
 
-    public static UserDto from(User user) {
+    /*public static UserDto from(User user) {
         Set<RoleDto> roleDtos = user.getRoles().stream().map(RoleDto::from).collect(Collectors.toSet());
         return new UserDto(
                 user.getId(),
@@ -32,5 +32,5 @@ public record UserDto(
                 user.getAbout(),
                 roleDtos
         );
-    }
+    }*/
 }

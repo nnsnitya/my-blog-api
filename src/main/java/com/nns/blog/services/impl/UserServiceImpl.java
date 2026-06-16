@@ -5,6 +5,7 @@ import com.nns.blog.dto.common.UserDto;
 import com.nns.blog.entities.Role;
 import com.nns.blog.entities.User;
 import com.nns.blog.exceptions.ResourceNotFoundException;
+import com.nns.blog.mappers.UserMapper;
 import com.nns.blog.repositories.RoleRepository;
 import com.nns.blog.repositories.UserRepository;
 import com.nns.blog.services.UserService;
@@ -28,34 +29,34 @@ public class UserServiceImpl implements UserService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private RoleRepository roleRepository;
+    @Autowired
+    private UserMapper userMapper;
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @Override
     public UserDto registerUser(UserDto userDto) {
         Set<Role> roles = new HashSet<>();//as role is not initialized in UserDto
-        User user = User.builder()
+        /*User user = User.builder()
                 .name(userDto.name())
                 .email(userDto.email())
                 .password(passwordEncoder.encode(userDto.password()))
                 .about(userDto.about())
                 .roles(roles)           //because UserDto is record not class
-                .build();
+                .build();*/
+        User user = userMapper.toEntity(userDto);
         Role role = roleRepository.findById(AppConstants.NORMAL_USER).get();
         user.getRoles().add(role);
         User newUser = userRepo.save(user);
-        return UserDto.from(newUser);
+//        return UserDto.from(newUser);
+        return userMapper.toDto(newUser);
     }
 
     @Override
     public UserDto createUser(UserDto userDto) {
-        User user = User.builder()
-                .name(userDto.name())
-                .email(userDto.email())
-                .password(this.passwordEncoder.encode(userDto.password()))
-                .about(userDto.about())
-                .build();
+        User user = userMapper.toEntity(userDto);
+        user.setPassword(this.passwordEncoder.encode(userDto.password()));
         User savedUser = this.userRepo.save(user);
-        return UserDto.from(savedUser);
+        return userMapper.toDto(savedUser);
     }
 
     @Override
@@ -68,20 +69,20 @@ public class UserServiceImpl implements UserService {
         user.setAbout(userDto.about());
 
         User updatedUser = userRepo.save(user);
-        return UserDto.from(updatedUser);
+        return userMapper.toDto(updatedUser);
     }
 
     @Override
     public UserDto getUserById(Long userId) {
         User user = userRepo.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
-        return UserDto.from(user);
+        return userMapper.toDto(user);
     }
 
     @Override
     public List<UserDto> getAllUsers() {
         List<User> users = userRepo.findAll();
-        List<UserDto> userDtos = users.stream().map(user -> UserDto.from(user)).collect(Collectors.toList());
+        List<UserDto> userDtos = users.stream().map(user -> userMapper.toDto(user)).collect(Collectors.toList());
         return userDtos;
     }
 

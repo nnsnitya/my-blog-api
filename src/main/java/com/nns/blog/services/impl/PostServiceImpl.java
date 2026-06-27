@@ -7,6 +7,7 @@ import com.nns.blog.entities.Category;
 import com.nns.blog.entities.Post;
 import com.nns.blog.entities.User;
 import com.nns.blog.exceptions.ResourceNotFoundException;
+import com.nns.blog.mappers.CategoryMapper;
 import com.nns.blog.repositories.CategoryRepository;
 import com.nns.blog.repositories.PostRepository;
 import com.nns.blog.repositories.UserRepository;
@@ -30,6 +31,8 @@ public class PostServiceImpl implements PostService {
     private CategoryRepository categoryRepo;
     @Autowired
     private UserRepository userRepo;
+    @Autowired
+    private CategoryMapper categoryMapper;
 
     @Override
     public PostDto createPost(PostDto postDto, Long userId, Long catId) {
@@ -60,10 +63,7 @@ public class PostServiceImpl implements PostService {
         post.setImageName(postDto.imageName());
 
         CategoryDto catDto = postDto.category();
-        Category cat = Category.builder()
-                .categoryId(catDto.categoryId())
-                .categoryTitle(catDto.categoryTitle())
-                .categoryDesc(catDto.categoryDescription()).build();
+        Category cat = categoryMapper.toEntity(catDto);
 
         post.setCategory(cat);
         Post updatedPost = postRepo.save(post);

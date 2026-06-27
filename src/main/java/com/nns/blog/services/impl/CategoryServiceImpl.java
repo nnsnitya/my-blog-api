@@ -3,6 +3,7 @@ package com.nns.blog.services.impl;
 import com.nns.blog.dto.common.CategoryDto;
 import com.nns.blog.entities.Category;
 import com.nns.blog.exceptions.ResourceNotFoundException;
+import com.nns.blog.mappers.CategoryMapper;
 import com.nns.blog.repositories.CategoryRepository;
 import com.nns.blog.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,16 +19,15 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Autowired
     private CategoryRepository categoryRepo;
+    @Autowired
+    private CategoryMapper categoryMapper;
 
     @CacheEvict(value = "categories", allEntries = true)
     @Override
     public CategoryDto createCategory(CategoryDto categoryDto) {
-        Category category = Category.builder()
-                .categoryTitle(categoryDto.categoryTitle())
-                .categoryDesc(categoryDto.categoryDescription())
-                .build();
+        Category category = categoryMapper.toEntity(categoryDto);
         Category savedCategory = categoryRepo.save(category);
-        return CategoryDto.from(savedCategory);
+        return categoryMapper.toDto(savedCategory);
     }
 
     @CacheEvict(value = "categories", allEntries = true)
@@ -38,7 +38,7 @@ public class CategoryServiceImpl implements CategoryService {
         category.setCategoryTitle(categoryDto.categoryTitle());
         category.setCategoryDesc(categoryDto.categoryDescription());
         Category updatedCat = categoryRepo.save(category);
-        return CategoryDto.from(updatedCat);
+        return categoryMapper.toDto(updatedCat);
     }
 
     @CacheEvict(value = "categories", allEntries = true)
@@ -53,14 +53,14 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryDto getCategory(Long categoryId) {
         Category cat = categoryRepo.findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException("Category","Category Id",categoryId));
-        return CategoryDto.from(cat);
+        return categoryMapper.toDto(cat);
     }
 
     @Cacheable(value = "categories", key = "'all_cat'")
     @Override
     public List<CategoryDto> getAllCategories() {
         List<Category> categories = categoryRepo.findAll();
-        List<CategoryDto> catDtos = categories.stream().map(cat -> CategoryDto.from(cat)).collect(Collectors.toList());
+        List<CategoryDto> catDtos = categories.stream().map(cat -> categoryMapper.toDto(cat)).collect(Collectors.toList());
         return catDtos;
     }
 

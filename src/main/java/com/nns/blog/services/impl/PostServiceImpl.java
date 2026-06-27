@@ -8,6 +8,7 @@ import com.nns.blog.entities.Post;
 import com.nns.blog.entities.User;
 import com.nns.blog.exceptions.ResourceNotFoundException;
 import com.nns.blog.mappers.CategoryMapper;
+import com.nns.blog.mappers.PostMapper;
 import com.nns.blog.repositories.CategoryRepository;
 import com.nns.blog.repositories.PostRepository;
 import com.nns.blog.repositories.UserRepository;
@@ -33,6 +34,8 @@ public class PostServiceImpl implements PostService {
     private UserRepository userRepo;
     @Autowired
     private CategoryMapper categoryMapper;
+    @Autowired
+    private PostMapper postMapper;
 
     @Override
     public PostDto createPost(PostDto postDto, Long userId, Long catId) {
@@ -51,7 +54,7 @@ public class PostServiceImpl implements PostService {
         post.setCategory(cat);
 
         Post newPost = postRepo.save(post);
-        return PostDto.from(newPost);
+        return postMapper.toDto(newPost);
     }
 
     @Override
@@ -67,7 +70,7 @@ public class PostServiceImpl implements PostService {
 
         post.setCategory(cat);
         Post updatedPost = postRepo.save(post);
-        return PostDto.from(updatedPost);
+        return postMapper.toDto(updatedPost);
     }
 
     @Override
@@ -83,14 +86,14 @@ public class PostServiceImpl implements PostService {
         Page<Post> pagePosts = postRepo.findAll(page);
         //List<Post> allPosts = pagePosts.getContent();
         //List<PostDto> posts = allPosts.stream().map(p -> Mapper.mapToPostDto(p)).toList();
-        return PostResponse.from(pagePosts);
+        return PostResponse.from(pagePosts, postMapper);
     }
 
     @Override
     public PostDto getPostById(Long postId) {
         Post post = postRepo.findById(postId)
                 .orElseThrow(() -> new ResourceNotFoundException("Post", "Id", postId));
-        return PostDto.from(post);
+        return postMapper.toDto(post);
     }
 
     @Override
@@ -102,7 +105,7 @@ public class PostServiceImpl implements PostService {
 //        List<Post> postsByCat = postRepo.findByCategory(cat);
 
         Page<Post> posts = postRepo.findByCategory(cat, pageable);
-        return PostResponse.from(posts);
+        return PostResponse.from(posts, postMapper);
     }
 
     @Override
@@ -117,13 +120,13 @@ public class PostServiceImpl implements PostService {
         User user = userRepo.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
         Page<Post> postsByUser = postRepo.findByUser(user, pageable);
-        return PostResponse.from(postsByUser);
+        return PostResponse.from(postsByUser, postMapper);
     }
 
     @Override
     public List<PostDto> searchPosts(String keyword) {
         List<Post> posts = postRepo.findByTitleContaining(keyword);
-        List<PostDto> list = posts.stream().map(p -> PostDto.from(p)).toList();
+        List<PostDto> list = posts.stream().map(p -> postMapper.toDto(p)).toList();
         return list;
     }
 

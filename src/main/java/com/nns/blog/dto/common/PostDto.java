@@ -17,21 +17,6 @@ public record PostDto(
     String userName,
     Set<CommentDto> comments
 ) {
-    public static PostDto from(Post post) {
-
-        Set<CommentDto> commentDtos = post.getComments().stream().map(CommentDto::from).collect(Collectors.toSet());
-
-        return new PostDto(post.getPostId(),
-                post.getTitle(),
-                post.getContent(),
-                post.getImageName(),
-                post.getAddedDate(),
-                CategoryDto.from(post.getCategory()),
-                post.getUser().getId(),
-                post.getUser().getName(),
-                commentDtos
-                );
-    }
 
     public PostDto updateImageName(String imgName) {
         return new PostDto(postId,

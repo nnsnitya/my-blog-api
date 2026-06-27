@@ -5,6 +5,7 @@ import com.nns.blog.entities.Comment;
 import com.nns.blog.entities.Post;
 import com.nns.blog.entities.User;
 import com.nns.blog.exceptions.ResourceNotFoundException;
+import com.nns.blog.mappers.CommentMapper;
 import com.nns.blog.repositories.CommentRepository;
 import com.nns.blog.repositories.PostRepository;
 import com.nns.blog.repositories.UserRepository;
@@ -21,6 +22,8 @@ public class CommentServiceImpl implements CommentService {
     private UserRepository userRepo;
     @Autowired
     private CommentRepository commentRepo;
+    @Autowired
+    private CommentMapper commentMapper;
 
 
     @Override
@@ -37,7 +40,7 @@ public class CommentServiceImpl implements CommentService {
         comment.setPost(post);
         comment.setUser(user);
         Comment savedComment = commentRepo.save(comment);
-        return CommentDto.from(savedComment);
+        return commentMapper.toDto(savedComment);
     }
 
     @Override

@@ -1,10 +1,7 @@
 package com.nns.blog.dto.common;
 
-import com.nns.blog.entities.Post;
-
 import java.util.Date;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public record PostDto(
     Long postId,

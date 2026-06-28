@@ -1,0 +1,45 @@
+package com.nns.blog.config;
+
+import com.nns.blog.constants.AppConstants;
+import com.nns.blog.entities.Role;
+import com.nns.blog.repositories.RoleRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+
+@Component
+@Profile("!test")
+public class RoleDataInitializer implements CommandLineRunner {
+
+    @Autowired
+    private RoleRepository roleRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Override
+    public void run(String... args) throws Exception {
+        System.out.println("xyz1234: "+ this.passwordEncoder.encode("xyz1234"));
+        try {
+            Role role = new Role();
+            role.setId(AppConstants.ADMIN_USER);
+            role.setName("ROLE_ADMIN");
+
+            Role role1 = new Role();
+            role1.setId(AppConstants.NORMAL_USER);
+            role1.setName("ROLE_NORMAL");
+
+            List<Role> roles = List.of(role, role1);
+            List<Role> result = roleRepository.saveAll(roles);
+
+            result.forEach(r -> {
+                System.out.println(r.getName());
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+}

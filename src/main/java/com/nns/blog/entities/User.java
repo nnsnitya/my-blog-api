@@ -33,12 +33,15 @@ public class User implements UserDetails {
     @Column(name = "about")
     private String about;
 
+    @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Post> posts = new HashSet<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Comment> comments = new HashSet<>();
 
+    @Builder.Default
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_role_mapping",
             joinColumns = @JoinColumn(name = "user", referencedColumnName = "user_id"),

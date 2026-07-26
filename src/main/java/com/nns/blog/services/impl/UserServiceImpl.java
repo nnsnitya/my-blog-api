@@ -44,6 +44,7 @@ public class UserServiceImpl implements UserService {
                 .roles(roles)           //because UserDto is record not class
                 .build();*/
         User user = userMapper.toEntity(userDto);
+        user.setPassword(user.getPassword());
         Role role = roleRepository.findById(AppConstants.NORMAL_USER).get();
         user.getRoles().add(role);
         User newUser = userRepo.save(user);

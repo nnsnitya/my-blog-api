@@ -6,7 +6,11 @@ import com.nns.blog.dto.requests.JwtAuthRequest;
 import com.nns.blog.dto.responses.Code;
 import com.nns.blog.dto.responses.JwtAuthResponse;
 import com.nns.blog.dto.responses.ResponseHandler;
+import com.nns.blog.dto.responses.UserDtoRp;
+import com.nns.blog.entities.User;
 import com.nns.blog.exceptions.ApiException;
+import com.nns.blog.mappers.UserMapper;
+import com.nns.blog.mappers.UserRpMapper;
 import com.nns.blog.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +38,8 @@ public class AuthController {
     private JwtUtil jwtUtils;
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserRpMapper userRpMapper;
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody JwtAuthRequest loginReq) throws Exception {
@@ -41,7 +47,9 @@ public class AuthController {
 
         UserDetails userDetails = this.userDetailsService.loadUserByUsername(loginReq.username());
         String token = this.jwtUtils.generateToken(userDetails);
-        JwtAuthResponse response = new JwtAuthResponse(token);
+        UserDtoRp userDtoRp = userRpMapper.toDto((User) userDetails);
+        JwtAuthResponse response = new JwtAuthResponse(token, userDtoRp);
+
         return ResponseHandler.generateResp(response, "Token Generated", HttpStatus.OK, Code.SUCCESS.getCode());
 
     }

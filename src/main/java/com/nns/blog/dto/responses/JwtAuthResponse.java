@@ -1,6 +1,7 @@
 package com.nns.blog.dto.responses;
 
 public record JwtAuthResponse(
-        String token
+        String token,
+        UserDtoRp user
 ) {
 }

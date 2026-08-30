@@ -1,14 +1,15 @@
 package com.nns.blog.services;
 
 import com.nns.blog.dto.common.UserDto;
+import com.nns.blog.dto.responses.UserDtoRp;
 
 import java.util.List;
 
 public interface UserService {
-    UserDto registerUser(UserDto userDto);
-    UserDto createUser(UserDto user);
-    UserDto updateUser(UserDto user, Long userId);
-    UserDto getUserById(Long userId);
-    List<UserDto> getAllUsers();
+    UserDtoRp registerUser(UserDto userDto);
+    UserDtoRp createUser(UserDto user);
+    UserDtoRp updateUser(UserDto user, Long userId);
+    UserDtoRp getUserById(Long userId);
+    List<UserDtoRp> getAllUsers();
     void deleteUser(Long userId);
 }

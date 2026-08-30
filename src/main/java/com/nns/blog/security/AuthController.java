@@ -66,7 +66,7 @@ public class AuthController {
 
     @PostMapping("register")
     public ResponseEntity<?> registerUser(@RequestBody UserDto userDto) {
-        UserDto registeredUser = this.userService.registerUser(userDto);
+        UserDtoRp registeredUser = this.userService.registerUser(userDto);
         return ResponseHandler.generateResp(registeredUser, "User registered successfully", HttpStatus.OK, Code.SUCCESS.getCode());
     }
 

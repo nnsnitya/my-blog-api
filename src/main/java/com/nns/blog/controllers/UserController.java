@@ -4,6 +4,7 @@ import com.nns.blog.constants.ApiConstants;
 import com.nns.blog.dto.common.UserDto;
 import com.nns.blog.dto.responses.Code;
 import com.nns.blog.dto.responses.ResponseHandler;
+import com.nns.blog.dto.responses.UserDtoRp;
 import com.nns.blog.services.UserService;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -27,15 +28,15 @@ public class UserController {
 
     //POST - create user
     @PostMapping("/")
-    public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto userDto) {
-        UserDto createUserDto = userService.createUser(userDto);
+    public ResponseEntity<UserDtoRp> createUser(@Valid @RequestBody UserDto userDto) {
+        UserDtoRp createUserDto = userService.createUser(userDto);
         return new ResponseEntity<>(createUserDto, HttpStatus.CREATED);
     }
 
     //PUT - update user
     @PutMapping("/{userId}")
-    public ResponseEntity<UserDto> updateUser(@Valid @RequestBody UserDto userDto, @PathVariable Long userId) {
-        UserDto updatedUser = userService.updateUser(userDto, userId);
+    public ResponseEntity<UserDtoRp> updateUser(@Valid @RequestBody UserDto userDto, @PathVariable Long userId) {
+        UserDtoRp updatedUser = userService.updateUser(userDto, userId);
         return ResponseEntity.ok(updatedUser);
     }
 

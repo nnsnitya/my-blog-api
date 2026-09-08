@@ -49,7 +49,7 @@ public class PostServiceImpl implements PostService {
                 .content(postDto.content())
                 .build();
         post.setImageName("default.png");
-        post.setAddedDate(new Date());
+        post.setPostDate(new Date());
         post.setUser(user);
         post.setCategory(cat);
 

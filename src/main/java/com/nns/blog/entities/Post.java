@@ -26,7 +26,8 @@ public class Post {
     private String content;
     @Column(name = "image_name")
     private String imageName;
-    private Date addedDate;
+    @Column(name = "added_date")
+    private Date postDate;
 
     @ManyToOne
     @JoinColumn(name = "category_id")

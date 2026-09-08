@@ -1,5 +1,6 @@
 package com.nns.blog.services.impl;
 
+import com.nns.blog.constants.AppConstants;
 import com.nns.blog.dto.common.CategoryDto;
 import com.nns.blog.dto.common.PostDto;
 import com.nns.blog.dto.responses.PostResponse;
@@ -48,7 +49,7 @@ public class PostServiceImpl implements PostService {
                 .title(postDto.title())
                 .content(postDto.content())
                 .build();
-        post.setImageName("default.png");
+        post.setImageName(AppConstants.DEFAULT_IMAGE);
         post.setPostDate(new Date());
         post.setUser(user);
         post.setCategory(cat);

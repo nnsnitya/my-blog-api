@@ -10,6 +10,8 @@ public final class AppConstants {
     public static final String SORT_BY = "postId";
     public static final String SORT_DIR = "asc";
 
+    public static final String DEFAULT_IMAGE = "default.png";
+
     public static final Long NORMAL_USER = Long.valueOf(502);
     public static final Long ADMIN_USER = Long.valueOf(501);
 }

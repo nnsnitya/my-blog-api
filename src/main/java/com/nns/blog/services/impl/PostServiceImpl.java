@@ -48,8 +48,9 @@ public class PostServiceImpl implements PostService {
         Post post = Post.builder()
                 .title(postDto.title())
                 .content(postDto.content())
+                .imageName(postDto.imageName())
                 .build();
-        post.setImageName(AppConstants.DEFAULT_IMAGE);
+//        post.setImageName(AppConstants.DEFAULT_IMAGE);
         post.setPostDate(new Date());
         post.setUser(user);
         post.setCategory(cat);
@@ -94,6 +95,11 @@ public class PostServiceImpl implements PostService {
     public PostDto getPostById(Long postId) {
         Post post = postRepo.findById(postId)
                 .orElseThrow(() -> new ResourceNotFoundException("Post", "Id", postId));
+        return postMapper.toDto(post);
+    }
+    @Override
+    public PostDto getPostDtoBlankObj() {
+        Post post = new Post();
         return postMapper.toDto(post);
     }
 

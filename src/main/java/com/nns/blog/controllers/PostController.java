@@ -4,6 +4,7 @@ import com.nns.blog.constants.ApiConstants;
 import com.nns.blog.constants.AppConstants;
 import com.nns.blog.dto.common.PostDto;
 import com.nns.blog.dto.responses.Code;
+import com.nns.blog.dto.responses.PostImageDto;
 import com.nns.blog.dto.responses.PostResponse;
 import com.nns.blog.dto.responses.ResponseHandler;
 import com.nns.blog.services.FileService;
@@ -38,6 +39,7 @@ public class PostController {
     public ResponseEntity<?> createPost(@RequestBody PostDto postDto,
                                         @PathVariable Long userId,
                                         @PathVariable Long catId) {
+        System.out.println("PostDto: "+postDto);
         PostDto createPostDto = postService.createPost(postDto, userId, catId);
         return ResponseHandler.generateResp(createPostDto, "Post created", HttpStatus.CREATED, Code.SUCCESS.getCode());
     }
@@ -106,16 +108,31 @@ public class PostController {
     }
 
     //post image upload
-    @PostMapping("/image/upload/{postId}")
+    /*@PostMapping("/image/upload/{postId}")
     public ResponseEntity<Object> uploadPostImage(@RequestParam("image") MultipartFile image,
                                                   @PathVariable Long postId) throws IOException {
         PostDto postDto = postService.getPostById(postId);
         String fileName = fileService.uploadImage(path, image);
         PostDto postDto1 = postDto.updateImageName(fileName);
         PostDto updatePost = postService.updatePost(postDto1, postId);
-
+        System.out.println("image uploaded: "+updatePost);
+        return ResponseHandler.generateResp(updatePost, "Image uploaded", HttpStatus.OK, Code.SUCCESS.getCode());
+    }*/
+    @PostMapping("/image/upload")
+    public ResponseEntity<Object> uploadPostImage(@RequestParam("image") MultipartFile image) throws IOException {
+        System.out.println("image upload 01");
+        PostDto postDto = postService.getPostDtoBlankObj();
+        String fileName = fileService.uploadImage(path, image);
+        PostDto updatePost = postDto.updateImageName(fileName);
+//        PostDto updatePost = postService.updatePost(postDto1, postId);
+        System.out.println("image uploaded: FileName is:  "+fileName);
         return ResponseHandler.generateResp(updatePost, "Image uploaded", HttpStatus.OK, Code.SUCCESS.getCode());
     }
+    /*public ResponseEntity<Object> uploadPostImage(@RequestParam("image") MultipartFile image,
+                                                  @PathVariable Long postId) {
+        PostImageDto postImageDto = postService.uploadPostImage(image, postId);
+    }*/
+
 
     //method to serve files
     @GetMapping(value = "/image/{imageName}", produces = MediaType.IMAGE_JPEG_VALUE)

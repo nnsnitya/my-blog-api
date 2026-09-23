@@ -1,26 +1,35 @@
 package com.nns.blog.services.impl;
 
-import com.nns.blog.constants.AppConstants;
 import com.nns.blog.dto.common.CategoryDto;
 import com.nns.blog.dto.common.PostDto;
+import com.nns.blog.dto.responses.PostImageDto;
 import com.nns.blog.dto.responses.PostResponse;
 import com.nns.blog.entities.Category;
 import com.nns.blog.entities.Post;
+import com.nns.blog.entities.PostImage;
 import com.nns.blog.entities.User;
 import com.nns.blog.exceptions.ResourceNotFoundException;
 import com.nns.blog.mappers.CategoryMapper;
+import com.nns.blog.mappers.PostImageMapper;
 import com.nns.blog.mappers.PostMapper;
 import com.nns.blog.repositories.CategoryRepository;
+import com.nns.blog.repositories.PostImageRepository;
 import com.nns.blog.repositories.PostRepository;
 import com.nns.blog.repositories.UserRepository;
+import com.nns.blog.services.FileUploadService;
 import com.nns.blog.services.PostService;
+import io.minio.errors.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.List;
 
@@ -30,6 +39,8 @@ public class PostServiceImpl implements PostService {
     @Autowired
     private PostRepository postRepo;
     @Autowired
+    private PostImageRepository postImageRepository;
+    @Autowired
     private CategoryRepository categoryRepo;
     @Autowired
     private UserRepository userRepo;
@@ -37,6 +48,10 @@ public class PostServiceImpl implements PostService {
     private CategoryMapper categoryMapper;
     @Autowired
     private PostMapper postMapper;
+    @Autowired
+    private FileUploadService fileUploadService;
+    @Autowired
+    private PostImageMapper imageMapper;
 
     @Override
     public PostDto createPost(PostDto postDto, Long userId, Long catId) {
@@ -135,6 +150,24 @@ public class PostServiceImpl implements PostService {
         List<Post> posts = postRepo.findByTitleContaining(keyword);
         List<PostDto> list = posts.stream().map(p -> postMapper.toDto(p)).toList();
         return list;
+    }
+
+    @Override
+    public PostImageDto uploadPostImage(MultipartFile file) throws ServerException, InsufficientDataException, ErrorResponseException, NoSuchAlgorithmException, IOException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException, ServerException, InsufficientDataException, ErrorResponseException, NoSuchAlgorithmException, IOException, InvalidKeyException, InvalidResponseException, XmlParserException {
+        //traverse & upload 1by1 each
+        String objectKey = this.fileUploadService.uploadImage(file);
+
+        PostImage image = new PostImage();
+//        image.setPost(post);
+        image.setObjectKey(objectKey);
+        image.setContentType(file.getContentType());
+        image.setIsThumbnail(true);
+
+
+//        Post savedPost = postRepo.save(post);
+        PostImage savedPostImage = postImageRepository.save(image);
+        //logic to upload image
+        return imageMapper.toDto(savedPostImage);
     }
 
 }

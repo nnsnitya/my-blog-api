@@ -1,7 +1,15 @@
 package com.nns.blog.services;
 
 import com.nns.blog.dto.common.PostDto;
+import com.nns.blog.dto.responses.PostImageDto;
 import com.nns.blog.dto.responses.PostResponse;
+import com.nns.blog.entities.PostImage;
+import io.minio.errors.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 public interface PostService {
@@ -28,6 +36,9 @@ public interface PostService {
 
     //search posts
     List<PostDto> searchPosts(String keyword);
+
+    //upload post image to minio
+    PostImageDto uploadPostImage(MultipartFile file) throws ServerException, InsufficientDataException, ErrorResponseException, NoSuchAlgorithmException, IOException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException;
 
     PostDto getPostDtoBlankObj();
 }

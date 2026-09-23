@@ -9,6 +9,7 @@ import com.nns.blog.dto.responses.PostResponse;
 import com.nns.blog.dto.responses.ResponseHandler;
 import com.nns.blog.services.FileService;
 import com.nns.blog.services.PostService;
+import io.minio.errors.*;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 @RestController
@@ -108,7 +111,7 @@ public class PostController {
     }
 
     //post image upload
-    /*@PostMapping("/image/upload/{postId}")
+    /*@PostMapping("/image/upload/{postId}")  //image uploading after createpost in project
     public ResponseEntity<Object> uploadPostImage(@RequestParam("image") MultipartFile image,
                                                   @PathVariable Long postId) throws IOException {
         PostDto postDto = postService.getPostById(postId);
@@ -118,20 +121,20 @@ public class PostController {
         System.out.println("image uploaded: "+updatePost);
         return ResponseHandler.generateResp(updatePost, "Image uploaded", HttpStatus.OK, Code.SUCCESS.getCode());
     }*/
-    @PostMapping("/image/upload")
+    /*@PostMapping("/image/upload")          //image uploading b4 createpost in project
     public ResponseEntity<Object> uploadPostImage(@RequestParam("image") MultipartFile image) throws IOException {
-        System.out.println("image upload 01");
         PostDto postDto = postService.getPostDtoBlankObj();
         String fileName = fileService.uploadImage(path, image);
         PostDto updatePost = postDto.updateImageName(fileName);
 //        PostDto updatePost = postService.updatePost(postDto1, postId);
         System.out.println("image uploaded: FileName is:  "+fileName);
         return ResponseHandler.generateResp(updatePost, "Image uploaded", HttpStatus.OK, Code.SUCCESS.getCode());
-    }
-    /*public ResponseEntity<Object> uploadPostImage(@RequestParam("image") MultipartFile image,
-                                                  @PathVariable Long postId) {
-        PostImageDto postImageDto = postService.uploadPostImage(image, postId);
     }*/
+    @PostMapping("/image/upload")           //image uploading b4 createpost in project
+    public ResponseEntity<Object> uploadPostImage(@RequestParam("image") MultipartFile image) throws ServerException, InsufficientDataException, ErrorResponseException, NoSuchAlgorithmException, IOException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+        PostImageDto postImageDto = postService.uploadPostImage(image);
+        return ResponseHandler.generateResp(postImageDto, "image uploaded", HttpStatus.OK, Code.SUCCESS.getCode());
+    }
 
 
     //method to serve files

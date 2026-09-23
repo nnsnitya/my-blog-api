@@ -3,6 +3,6 @@
 spring:
   data:
     redis:
-#      host: localhost
-      host: my_blog_redis
+      host: localhost
+#      host: my_blog_redis
       port: 6379

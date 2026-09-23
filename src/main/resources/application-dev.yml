@@ -5,11 +5,13 @@ spring:
   application:
     name: my-blog-api
   config:
-    import:
-      - classpath:database-dev.yml
-      - classpath:multipart-dev.yml
-      - classpath:security-dev.yml
-      - classpath:redis-dev.yml
+    import: "classpath:database-dev.yml,classpath:minio-dev.yml,classpath:redis-dev.yml,classpath:security-dev.yml,classpath:multipart-dev.yml"
+#    import:
+#      - classpath:database-dev.yml
+#      - classpath:multipart-dev.yml
+#      - classpath:security-dev.yml
+#      - classpath:redis-dev.yml
+#      - classpath:minio-dev.yml
 
 profile:
   active: dev

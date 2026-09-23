@@ -14,4 +14,5 @@ public interface FileUploadService {
             ErrorResponseException, InvalidResponseException, XmlParserException,
             InternalException;
 
+    String getPresignedUrl(String objectKey) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException;
 }

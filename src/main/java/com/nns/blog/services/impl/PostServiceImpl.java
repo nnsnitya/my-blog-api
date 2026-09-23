@@ -110,6 +110,14 @@ public class PostServiceImpl implements PostService {
     public PostDto getPostById(Long postId) {
         Post post = postRepo.findById(postId)
                 .orElseThrow(() -> new ResourceNotFoundException("Post", "Id", postId));
+        String presignedUrl = null;
+        try {
+            presignedUrl = this.fileUploadService.getPresignedUrl(post.getImageName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        post.setImageName(presignedUrl);
         return postMapper.toDto(post);
     }
     @Override

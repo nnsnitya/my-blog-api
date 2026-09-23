@@ -50,6 +50,19 @@ public class FileUploadServiceImpl implements FileUploadService {
         return objectKey;
     }
 
+    @Override
+    public String getPresignedUrl(String objectKey) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+
+        return minioClient.getPresignedObjectUrl(
+                GetPresignedObjectUrlArgs.builder()
+                        .bucket(bucketName)
+                        .object(objectKey)
+                        .method(Method.GET)
+                        .expiry(1, TimeUnit.MINUTES)
+                        .build()
+        );
+    }
+
     private void validate(MultipartFile file) {
         //validate logic
     }

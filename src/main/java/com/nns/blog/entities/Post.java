@@ -33,6 +33,9 @@ public class Post {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    @OneToOne(mappedBy = "post", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    private PostImage postImage;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
